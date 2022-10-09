@@ -30,6 +30,10 @@ code {
     margin: 20px;
 }
 
+th {
+    user-select: none;
+}
+
 @keyframes loader {
     0% {
         transform: rotate(0deg);
