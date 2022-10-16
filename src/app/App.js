@@ -1,23 +1,14 @@
 import React from "react";
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Main from "./layouts/main";
 import Login from "./layouts/login";
 import Users from "./layouts/users";
+import NavBar from "./components/navBar";
 
 function App() {
     return (
         <div>
-            <ul className="nav">
-                <li className="nav-item">
-                    <Link className="nav-link active" to="/">Main</Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link active" to="/login">Login</Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link active" to="/users">Users</Link>
-                </li>
-            </ul>
+            <NavBar/>
             <Switch>
                 <Route path="/" exact component={Main}/>
                 <Route path="/login" component={Login}/>

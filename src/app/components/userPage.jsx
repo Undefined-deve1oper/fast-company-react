@@ -17,11 +17,10 @@ const UserPage = ({ id }) => {
         return (
             <div>
                 <h1>{name}</h1>
-                <h1>Профессия: {profession.name}</h1>
-                <QualitiesList qualities={qualities}/>
-                <h4>completedMeetings: {completedMeetings}</h4>
+                <h2>Профессия: {profession.name}</h2>
+                <QualitiesList qualities={qualities} />
+                <p>completedMeetings: {completedMeetings}</p>
                 <h2>Rate: {rate}</h2>
-
                 <Link to="/users">
                     <button role="button">Все пользователи</button>
                 </Link>
