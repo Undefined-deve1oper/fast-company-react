@@ -5,11 +5,10 @@ import Pagination from "./pagination";
 import GroupList from "./groupList";
 import api from "../api";
 import SearchStatus from "./searchStatus";
-import Loader from "./loader";
 import UsersTable from "./usersTable";
 import _ from "lodash";
 
-const Users = () => {
+const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -68,25 +67,21 @@ const Users = () => {
 
         return (
             <div className="d-flex">
-                {professions
-                    ? (
-                        <div className="d-flex flex-column flex-shrink-0 p-3">
-                            <GroupList
-                                items={professions}
-                                selectedItem={selectedProf}
-                                onItemSelect={handleProfessionsSelect}
-                            />
-                            <button
-                                className="btn btn-secondary mt-2"
-                                onClick={clearFilter}
-                            >
+                {professions && (
+                    <div className="d-flex flex-column flex-shrink-0 p-3">
+                        <GroupList
+                            items={professions}
+                            selectedItem={selectedProf}
+                            onItemSelect={handleProfessionsSelect}
+                        />
+                        <button
+                            className="btn btn-secondary mt-2"
+                            onClick={clearFilter}
+                        >
                             Очистить
-                            </button>
-                        </div>
-                    )
-                    : (
-                        <Loader />
-                    )}
+                        </button>
+                    </div>
+                )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
                     {count > 0 && (
@@ -111,10 +106,10 @@ const Users = () => {
         );
     }
 
-    return <Loader />;
+    return <h1>Loading...</h1>;
 };
-Users.propTypes = {
+UsersList.propTypes = {
     users: PropTypes.array
 };
 
-export default Users;
+export default UsersList;

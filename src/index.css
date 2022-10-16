@@ -20,25 +20,6 @@ code {
     box-sizing: border-box;
 }
 
-.loader {
-    width: calc(var(--index) * 5);
-    height: calc(var(--index) * 5);
-    border-radius: 50%;
-    background: none;
-    border: 10px dashed #e7e7e0;
-    animation: loader 3s ease-out infinite;
-    margin: 20px;
-}
-
 th {
     user-select: none;
-}
-
-@keyframes loader {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
 }
