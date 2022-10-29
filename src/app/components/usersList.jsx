@@ -95,16 +95,15 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
+                    <UsersFilter filter={ filter } setFilter={ setFilter }/>
                     {count > 0 && (
-                        <>
-                            <UsersFilter filter={ filter } setFilter={ setFilter }/>
-                            <UserTable
-                                users={filter === "" ? usersCrop : searchedUsers}
-                                onSort={handleSort}
-                                selectedSort={sortBy}
-                                onDelete={handleDelete}
-                                onToggleBookMark={handleToggleBookMark}
-                            /></>
+                        <UserTable
+                            users={filter === "" ? usersCrop : searchedUsers}
+                            onSort={handleSort}
+                            selectedSort={sortBy}
+                            onDelete={handleDelete}
+                            onToggleBookMark={handleToggleBookMark}
+                        />
                     )}
                     <div className="d-flex justify-content-center">
                         {filter === "" && (
