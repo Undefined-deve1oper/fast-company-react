@@ -25,9 +25,7 @@ const UsersListPage = () => {
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
         // Удаляем юзера из localStorage
-        const usersList = JSON.parse(localStorage.getItem("users"));
-        const updateUsersList = usersList.filter((user) => user._id !== userId);
-        localStorage.setItem("users", JSON.stringify(updateUsersList));
+        api.users.deleteUser(userId);
     };
     const handleToggleBookMark = (id) => {
         const newArray = users.map((user) => {

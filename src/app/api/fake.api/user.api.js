@@ -184,6 +184,13 @@ const update = (id, data) =>
         localStorage.setItem("users", JSON.stringify(users));
         resolve(users[userIndex]);
     });
+const deleteUser = (id) =>
+    new Promise((resolve) => {
+        const users = JSON.parse(localStorage.getItem("users"));
+        const updateUsers = users.filter((user) => user._id !== id);
+        localStorage.setItem("users", JSON.stringify(updateUsers));
+        resolve(users);
+    });
 
 const getById = (id) =>
     new Promise((resolve) => {
@@ -198,5 +205,6 @@ const getById = (id) =>
 export default {
     fetchAll,
     getById,
-    update
+    update,
+    deleteUser
 };
