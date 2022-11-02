@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { paginate } from "../utils/paginate";
-import Pagination from "./pagination";
-import api from "../api";
-import GroupList from "./groupList";
-import SearchStatus from "./searchStatus";
-import UserTable from "./usersTable";
+import { paginate } from "../../../utils/paginate";
+import Pagination from "../../common/pagination";
+import api from "../../../api";
+import GroupList from "../../common/groupList";
+import SearchStatus from "../../ui/searchStatus";
+import UserTable from "../../ui/usersTable";
 import _ from "lodash";
-import UsersFilter from "./UsersFilter";
-import { useFilter } from "../hooks/useFilter";
-const UsersList = () => {
+import Searchbar from "../../common/Searchbar";
+import { useFilter } from "../../../hooks/useFilter";
+const UsersListPage = () => {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
-    const [filter, setFilter] = useState("");
-    const searchedUsers = useFilter(users, filter);
+    const [searchQuery, setSearchQuery] = useState("");
+    const searchedUsers = useFilter(users, searchQuery);
     const pageSize = 8;
 
     useEffect(() => {
@@ -41,13 +41,16 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-        setFilter("");
-    }, [selectedProf]);
+    }, [selectedProf, searchQuery]);
 
     const handleProfessionSelect = (item) => {
+        if (searchQuery !== "") setSearchQuery("");
         setSelectedProf(item);
     };
-
+    const handleSearchQuery = (value) => {
+        setSelectedProf(undefined);
+        setSearchQuery(value);
+    };
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
@@ -56,15 +59,14 @@ const UsersList = () => {
     };
 
     if (users) {
-        const filteredUsers = selectedProf
-            ? users.filter(
-                (user) =>
-                    JSON.stringify(user.profession) ===
-                    JSON.stringify(selectedProf)
-            )
+        const selectedUsersProf = selectedProf
+            ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
             : users;
+        const filteredUsers = searchQuery
+            ? searchedUsers // Список юзеров отфильтрованных по поиску
+            : selectedUsersProf; // Список юзеров отфильтрованных по професси
 
-        const count = filter === "" ? filteredUsers.length : searchedUsers.length;
+        const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
             filteredUsers,
             [sortBy.path],
@@ -88,17 +90,16 @@ const UsersList = () => {
                             className="btn btn-secondary mt-2"
                             onClick={clearFilter}
                         >
-                            {" "}
                             Очистить
                         </button>
                     </div>
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
-                    <UsersFilter filter={ filter } setFilter={ setFilter }/>
+                    <Searchbar value={ searchQuery } onChange={ handleSearchQuery }/>
                     {count > 0 && (
                         <UserTable
-                            users={filter === "" ? usersCrop : searchedUsers}
+                            users={usersCrop}
                             onSort={handleSort}
                             selectedSort={sortBy}
                             onDelete={handleDelete}
@@ -106,14 +107,12 @@ const UsersList = () => {
                         />
                     )}
                     <div className="d-flex justify-content-center">
-                        {filter === "" && (
-                            <Pagination
-                                itemsCount={count}
-                                pageSize={pageSize}
-                                currentPage={currentPage}
-                                onPageChange={handlePageChange}
-                            />
-                        )}
+                        <Pagination
+                            itemsCount={count}
+                            pageSize={pageSize}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                        />
                     </div>
                 </div>
             </div>
@@ -121,8 +120,8 @@ const UsersList = () => {
     }
     return "loading...";
 };
-UsersList.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.array
 };
 
-export default UsersList;
+export default UsersListPage;
