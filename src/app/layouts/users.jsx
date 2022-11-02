@@ -6,14 +6,14 @@ import EditUserPage from "../components/page/editUserPage";
 
 const Users = () => {
     const { userId, edit } = useParams();
+    const user = edit ? <EditUserPage id={userId}/> : <UserPage id={userId}/>;
 
     return (
         <>
-            {userId ? (
-                edit ? <EditUserPage id={userId}/> : <UserPage id={userId}/>
-            ) : (
-                <UsersListPage/>
-            )}
+            { userId
+                ? user
+                : <UsersListPage/>
+            }
         </>);
 };
 

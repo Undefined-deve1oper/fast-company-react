@@ -32,7 +32,7 @@ const UserPage = ({ id }) => {
 };
 
 UserPage.propTypes = {
-    id: PropTypes.string.isRequired
+    id: PropTypes.string
 };
 
 export default UserPage;

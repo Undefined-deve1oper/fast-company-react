@@ -24,6 +24,10 @@ const UsersListPage = () => {
     }, []);
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
+        // Удаляем юзера из localStorage
+        const usersList = JSON.parse(localStorage.getItem("users"));
+        const updateUsersList = usersList.filter((user) => user._id !== userId);
+        localStorage.setItem("users", JSON.stringify(updateUsersList));
     };
     const handleToggleBookMark = (id) => {
         const newArray = users.map((user) => {
@@ -58,7 +62,7 @@ const UsersListPage = () => {
         setSortBy(item);
     };
 
-    if (users) {
+    if (users.length > 0) {
         const selectedUsersProf = selectedProf
             ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
             : users;

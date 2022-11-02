@@ -6,19 +6,16 @@ import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
+import { useHistory } from "react-router-dom";
 
 const EditUserPage = ({ id }) => {
-    const [data, setData] = useState({
-        name: "",
-        email: "",
-        profession: "",
-        sex: "male",
-        qualities: []
-    });
-    const [user, setUser] = useState([]);
+    const [data, setData] = useState({});
     const [qualities, setQualities] = useState([]);
     const [professions, setProfession] = useState([]);
     const [errors, setErrors] = useState({});
+    const { goBack } = useHistory();
+
+    const isValid = Object.keys(errors).length === 0;
     const validatorConfig = {
         name: {
             isRequired: {
@@ -32,17 +29,10 @@ const EditUserPage = ({ id }) => {
             isEmail: {
                 message: "Email введен не корректно"
             }
-        },
-        profession: {
-            isRequired: {
-                message: "Обязательно выберите вашу профессию"
-            }
         }
     };
-    const isValid = Object.keys(errors).length === 0;
 
     useEffect(() => {
-        api.users.getById(id).then((data) => setUser(data));
         api.professions.fetchAll().then((data) => {
             const professionsList = Object.keys(data).map((professionName) => ({
                 label: data[professionName].name,
@@ -57,6 +47,19 @@ const EditUserPage = ({ id }) => {
                 color: data[optionName].color
             }));
             setQualities(qualitiesList);
+        });
+        api.users.getById(id).then((data) => {
+            setData({
+                name: data.name,
+                email: data.email,
+                profession: data.profession._id,
+                sex: data.sex,
+                qualities: data.qualities.map((optionName) => ({
+                    label: optionName.name,
+                    value: optionName._id,
+                    color: optionName.color
+                }))
+            });
         });
     }, []);
     useEffect(() => {
@@ -103,18 +106,19 @@ const EditUserPage = ({ id }) => {
         const isValid = validate();
         if (!isValid) return;
         const { profession, qualities } = data;
-        console.log({
+        api.users.update(id, {
             ...data,
             profession: getProfessionById(profession),
             qualities: getQualities(qualities)
         });
+        goBack();
     };
 
     return (
         <div className="container mt-5">
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {user && Object.keys(professions).length > 0 ? (
+                    {professions.length > 0 && qualities.length > 0 ? (
                         <form onSubmit={handleSubmit}>
                             <TextField
                                 id="name"
@@ -159,7 +163,7 @@ const EditUserPage = ({ id }) => {
                                 name="qualities"
                                 label="Выберите ваши качества"
                             />
-                            <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">
+                            <button type="submit" disabled={!isValid} className="btn btn-primary w-100 mx-auto">
                                 Обновить
                             </button>
                         </form>
