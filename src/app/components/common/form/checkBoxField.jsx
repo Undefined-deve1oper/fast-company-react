@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const CheckBoxField = ({ name, value, onChange, children, error }) => {
+const CheckBoxField = ({ name, value, onChange, children, error, ...rest }) => {
     const handleChange = () => {
         onChange({ name, value: !value });
     };
@@ -18,6 +18,7 @@ const CheckBoxField = ({ name, value, onChange, children, error }) => {
                 id={ name }
                 checked={value}
                 onChange={handleChange}
+                {...rest}
             />
             <label className="form-check-label" htmlFor={name}>
                 {children}

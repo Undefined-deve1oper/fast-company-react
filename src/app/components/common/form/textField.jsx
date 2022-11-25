@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-const TextField = ({ label, type, name, value, onChange, error }) => {
+const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = ({ target }) => {
@@ -25,6 +25,7 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
                     value={value}
                     onChange={handleChange}
                     className={getInputClasses()}
+                    {...rest}
                 />
                 {type === "password" && (
                     <button className="btn btn-outline-secondary" type="button" onClick={toggleShowPassword}>
@@ -46,10 +47,10 @@ TextField.defaultProps = {
 };
 
 TextField.propTypes = {
-    label: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
+    label: PropTypes.string,
+    name: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.func,
     type: PropTypes.string,
     error: PropTypes.string
 };

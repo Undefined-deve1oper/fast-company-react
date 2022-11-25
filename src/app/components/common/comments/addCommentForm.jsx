@@ -9,14 +9,15 @@ const initialData = { userId: "", content: "" };
 
 const AddCommentForm = ({ onSubmit }) => {
     const [data, setData] = useState(initialData);
-    const [users, setUsers] = useState({});
+    const [users, setUsers] = useState([]);
     const [errors, setErrors] = useState({});
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-    };
+
+    useEffect(() => {
+        API.users.fetchAll().then((data) =>
+            setUsers(data.map((user) => ({ value: user._id, label: user.name })))
+        );
+    }, []);
+
     const validatorConfig = {
         userId: {
             isRequired: {
@@ -35,9 +36,7 @@ const AddCommentForm = ({ onSubmit }) => {
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
-    useEffect(() => {
-        API.users.fetchAll().then(setUsers);
-    }, []);
+
     const clearForm = () => {
         setData(initialData);
         setErrors({});
@@ -49,19 +48,20 @@ const AddCommentForm = ({ onSubmit }) => {
         onSubmit(data);
         clearForm();
     };
-    const arrayOfUsers =
-        users &&
-        Object.keys(users).map((userId) => ({
-            label: users[userId].name,
-            value: users[userId]._id
+    const handleChange = (target) => {
+        setData((prevState) => ({
+            ...prevState,
+            [target.name]: target.value
         }));
+    };
+
     return (
         <div>
             <h2>New comment</h2>
             <form onSubmit={ handleSubmit }>
                 <SelectField
                     onChange={ handleChange }
-                    options={ arrayOfUsers }
+                    options={ users }
                     name="userId"
                     value={ data.userId }
                     defaultOption="Выберите пользователя"

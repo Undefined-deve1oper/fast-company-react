@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../api";
-import { validator } from "../../../utils/validator";
-import TextField from "../../common/form/textField";
-import SelectField from "../../common/form/selectField";
-import RadioField from "../../common/form/radioField";
-import MultiSelectField from "../../common/form/multiSelectField";
 import { useHistory, useParams } from "react-router-dom";
 import BackHistoryButton from "../../common/backButton";
+import FormComponent, { MultiSelectField, RadioField, SelectField, TextField } from "../../common/form";
+
+const initialState = {
+    name: "",
+    email: "",
+    profession: "",
+    sex: "male",
+    qualities: []
+};
 
 const EditUserPage = () => {
     const { userId } = useParams();
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
-    const [data, setData] = useState({
-        name: "",
-        email: "",
-        profession: "",
-        sex: "male",
-        qualities: []
-    });
+    const [data, setData] = useState(initialState);
     const [professions, setProfession] = useState([]);
     const [qualities, setQualities] = useState([]);
-    const [errors, setErrors] = useState({});
+
     const getProfessionById = (id) => {
         for (const prof of professions) {
             if (prof.value === id) {
@@ -44,10 +42,7 @@ const EditUserPage = () => {
         }
         return qualitiesArray;
     };
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return;
+    const handleSubmit = (data) => {
         const { profession, qualities } = data;
         api.users
             .update(userId, {
@@ -88,7 +83,6 @@ const EditUserPage = () => {
     }, []);
     useEffect(() => {
         if (data._id) setIsLoading(false);
-        validate();
     }, [data]);
 
     const validatorConfig = {
@@ -107,77 +101,57 @@ const EditUserPage = () => {
         }
     };
 
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-    };
-    const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-    const isValid = Object.keys(errors).length === 0;
+    if (isLoading && Object.keys(professions).length === 0) {
+        return <h1>Loading...</h1>;
+    }
+
     return (
         <div className="container mt-5">
             <BackHistoryButton/>
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {!isLoading && Object.keys(professions).length > 0 ? (
-                        <form onSubmit={handleSubmit}>
-                            <TextField
-                                label="Имя"
-                                name="name"
-                                value={data.name}
-                                onChange={handleChange}
-                                error={errors.name}
-                            />
-                            <TextField
-                                label="Электронная почта"
-                                name="email"
-                                value={data.email}
-                                onChange={handleChange}
-                                error={errors.email}
-                            />
-                            <SelectField
-                                label="Выбери свою профессию"
-                                defaultOption="Choose..."
-                                options={professions}
-                                name="profession"
-                                onChange={handleChange}
-                                value={data.profession}
-                                error={errors.profession}
-                            />
-                            <RadioField
-                                options={[
-                                    { name: "Male", value: "male" },
-                                    { name: "Female", value: "female" },
-                                    { name: "Other", value: "other" }
-                                ]}
-                                value={data.sex}
-                                name="sex"
-                                onChange={handleChange}
-                                label="Выберите ваш пол"
-                            />
-                            <MultiSelectField
-                                defaultValue={data.qualities}
-                                options={qualities}
-                                onChange={handleChange}
-                                name="qualities"
-                                label="Выберите ваши качества"
-                            />
-                            <button
-                                type="submit"
-                                disabled={!isValid}
-                                className="btn btn-primary w-100 mx-auto"
-                            >
-                                Обновить
-                            </button>
-                        </form>
-                    ) : (
-                        "Loading..."
-                    )}
+                    <FormComponent
+                        onSubmit={ handleSubmit }
+                        validatorConfig={ validatorConfig }
+                        defaultData={ data }
+                    >
+                        <TextField
+                            label="Имя"
+                            name="name"
+                            autoFocus
+                        />
+                        <TextField
+                            label="Электронная почта"
+                            name="email"
+                        />
+                        <SelectField
+                            label="Выбери свою профессию"
+                            defaultOption="Choose..."
+                            options={ professions }
+                            name="profession"
+                        />
+                        <RadioField
+                            options={ [
+                                { name: "Male", value: "male" },
+                                { name: "Female", value: "female" },
+                                { name: "Other", value: "other" }
+                            ] }
+                            name="sex"
+                            label="Выберите ваш пол"
+                        />
+                        <MultiSelectField
+                            defaultValue={ data.qualities }
+                            options={ qualities }
+                            name="qualities"
+                            label="Выберите ваши качества"
+                        />
+                        <button
+                            type="submit"
+                            className="btn btn-primary w-100 mx-auto"
+                        >
+                            Обновить
+                        </button>
+                    </FormComponent>
                 </div>
             </div>
         </div>
