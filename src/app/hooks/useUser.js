@@ -15,7 +15,7 @@ const UserProvider = ({ children }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        getUsers();
+        getUsersList();
     }, []);
     useEffect(() => {
         if (error !== null) {
@@ -24,14 +24,17 @@ const UserProvider = ({ children }) => {
         }
     }, [error]);
 
-    async function getUsers() {
+    async function getUsersList() {
         try {
-            const { content } = await userService.get();
+            const { content } = await userService.fetchAll();
             setUsers(content);
             setLoading(false);
         } catch (error) {
             errorCatcher(error);
         }
+    }
+    function getUserById(id) {
+        return users.find((user) => user._id === id);
     }
 
     function errorCatcher(error) {
@@ -40,7 +43,7 @@ const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={ { users } }>
+        <UserContext.Provider value={ { users, getUserById } }>
             { !isLoading ? children : "Loading..."}
         </UserContext.Provider>
     );

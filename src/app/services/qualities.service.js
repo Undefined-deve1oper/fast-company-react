@@ -3,7 +3,7 @@ import httpService from "./http.service";
 const qualitiesEndpoint = "quality/";
 
 const qualitiesService = {
-    fetchAll: async () => {
+    get: async () => {
         const { data } = await httpService.get(qualitiesEndpoint);
         return data;
     }

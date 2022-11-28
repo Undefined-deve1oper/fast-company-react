@@ -6,23 +6,24 @@ const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => 
     const [data, setData] = useState(defaultData || {});
     const [errors, setErrors] = useState({});
 
+    const validate = useCallback((data) => {
+        const errors = validator(data, validatorConfig);
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    }, [validatorConfig, setErrors]);
+
     const handleChange = useCallback((target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
     }, []);
-    const validate = useCallback((data) => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    }, [validatorConfig, setErrors]);
-    const handleSubmit = (event) => {
+    const handleSubmit = useCallback((event) => {
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
         onSubmit(data);
-    };
+    }, []);
     const handleKeyDown = useCallback((event) => {
         if (event.keyCode === 13) {
             event.preventDefault();

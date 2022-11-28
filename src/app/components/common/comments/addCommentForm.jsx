@@ -4,6 +4,7 @@ import SelectField from "../form/selectField";
 import TextAreaField from "../form/textAreaField";
 import { validator } from "../../../utils/validator";
 import PropTypes from "prop-types";
+import { addCommentValidatorConfig } from "../../../utils/validatorConfig";
 
 const initialData = { userId: "", content: "" };
 
@@ -18,18 +19,7 @@ const AddCommentForm = ({ onSubmit }) => {
         );
     }, []);
 
-    const validatorConfig = {
-        userId: {
-            isRequired: {
-                message: "Выберите от чьего имени вы хотите отправить сообщение"
-            }
-        },
-        content: {
-            isRequired: {
-                message: "Сообщение не может быть пустым"
-            }
-        }
-    };
+    const validatorConfig = addCommentValidatorConfig;
 
     const validate = () => {
         const errors = validator(data, validatorConfig);

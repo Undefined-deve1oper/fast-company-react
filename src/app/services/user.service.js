@@ -3,7 +3,11 @@ import httpService from "./http.service";
 const userEndpoint = "user/";
 
 const userService = {
-    get: async () => {
+    getUserById: async (id) => {
+        const { data } = await httpService.get(userEndpoint + id);
+        return data;
+    },
+    fetchAll: async () => {
         const { data } = await httpService.get(userEndpoint);
         return data;
     }

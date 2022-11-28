@@ -6,6 +6,7 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
+import { registerFormValidatorConfig } from "../../utils/validatorConfig";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -19,41 +20,7 @@ const RegisterForm = () => {
     const [qualities, setQualities] = useState([]);
     const [professions, setProfession] = useState([]);
     const [errors, setErrors] = useState({});
-    const validatorConfig = {
-        email: {
-            isRequired: {
-                message: "Email обязателен для заполнения"
-            },
-            isEmail: {
-                message: "Email введен не корректно"
-            }
-        },
-        password: {
-            isRequired: {
-                message: "Пароль обязателен для заполнения"
-            },
-            isCapitalSymbol: {
-                message: "Пароль должен содержать хотя бы одну заглавную букву"
-            },
-            isContainDigit: {
-                message: "Пароль должен содержать хотя бы одно число"
-            },
-            min: {
-                message: `Пароль должен состоять минимум из 8 символов`,
-                value: 8
-            }
-        },
-        profession: {
-            isRequired: {
-                message: "Обязательно выберите вашу профессию"
-            }
-        },
-        licence: {
-            isRequired: {
-                message: "Вы не можете спользовать наш сервис без подтверждения лицензионного соглашения"
-            }
-        }
-    };
+    const validatorConfig = registerFormValidatorConfig;
     const isValid = Object.keys(errors).length === 0;
 
     useEffect(() => {
@@ -125,60 +92,60 @@ const RegisterForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={ handleSubmit }>
             <TextField
                 id="email"
                 name="email"
                 label="Email"
-                value={data.email}
-                onChange={handleChange}
-                error={errors.email}
+                value={ data.email }
+                onChange={ handleChange }
+                error={ errors.email }
             />
             <TextField
                 id="password"
                 name="password"
                 label="Пароль"
                 type="password"
-                value={data.password}
-                onChange={handleChange}
-                error={errors.password}
+                value={ data.password }
+                onChange={ handleChange }
+                error={ errors.password }
             />
             <SelectField
                 label="Выберите вашу профессию"
                 defaultOption="Choose..."
                 name="profession"
-                options={professions}
-                onChange={handleChange}
-                value={data.profession}
-                error={errors.profession}
+                options={ professions }
+                onChange={ handleChange }
+                value={ data.profession }
+                error={ errors.profession }
             />
             <RadioField
-                options={[
+                options={ [
                     { name: "Male", value: "male" },
                     { name: "Female", value: "female" },
                     { name: "Other", value: "other" }
-                ]}
-                value={data.sex}
+                ] }
+                value={ data.sex }
                 name="sex"
-                onChange={handleChange}
+                onChange={ handleChange }
                 label="Выберите ваш пол"
             />
             <MultiSelectField
-                options={qualities}
-                onChange={handleChange}
-                defaultValue={data.qualities}
+                options={ qualities }
+                onChange={ handleChange }
+                defaultValue={ data.qualities }
                 name="qualities"
                 label="Выберите ваши качества"
             />
             <CheckBoxField
-                value={data.licence}
+                value={ data.licence }
                 name="licence"
-                onChange={handleChange}
-                error={errors.licence}
+                onChange={ handleChange }
+                error={ errors.licence }
             >
                 Подтвердить <a>лицензионное</a> сообщение
             </CheckBoxField>
-            <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">
+            <button disabled={ !isValid } className="btn btn-primary w-100 mx-auto">
                 Submit
             </button>
         </form>
