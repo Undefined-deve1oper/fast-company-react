@@ -12,6 +12,8 @@ import { useFilter } from "../../../hooks/useFilter";
 import { useUser } from "../../../hooks/useUser";
 
 const UsersListPage = () => {
+    const { users, isLoading } = useUser();
+
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -19,12 +21,7 @@ const UsersListPage = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const pageSize = 8;
 
-    const { users } = useUser();
-    const searchedUsers = useFilter(users, searchQuery);
-    console.log(users);
-
     const handleDelete = (userId) => {
-        // setUsers(users.filter((user) => user._id !== userId));
         console.log(userId);
     };
     const handleToggleBookMark = (id) => {
@@ -34,7 +31,6 @@ const UsersListPage = () => {
             }
             return user;
         });
-        // setUsers(newArray);
         console.log(newArray);
     };
 
@@ -61,7 +57,8 @@ const UsersListPage = () => {
         setSortBy(item);
     };
 
-    if (users.length > 0) {
+    if (!isLoading && users.length > 0) {
+        const searchedUsers = useFilter(users, searchQuery);
         const selectedUsersProf = selectedProf
             ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
             : users;

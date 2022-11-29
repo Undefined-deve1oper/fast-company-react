@@ -9,7 +9,6 @@ import { useUser } from "../../../hooks/useUser";
 const UserPage = ({ id }) => {
     const { getUserById } = useUser();
     const user = getUserById(id);
-    console.log(user);
 
     if (user) {
         return (

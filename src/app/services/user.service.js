@@ -10,6 +10,10 @@ const userService = {
     fetchAll: async () => {
         const { data } = await httpService.get(userEndpoint);
         return data;
+    },
+    update: async (id, content) => {
+        const { data } = await httpService.put(userEndpoint + id, content);
+        return data;
     }
 };
 
