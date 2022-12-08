@@ -1,35 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { validator } from "../../utils/validator";
+import React from "react";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { loginFormValidatorConfig } from "../../utils/validatorConfig";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import FormComponent from "../common/form";
+
+const initialData = {
+    email: "",
+    password: "",
+    stayOn: false
+};
 
 const LoginForm = () => {
     const history = useHistory();
     const { signIn } = useAuth();
-    const [data, setData] = useState({ email: "", password: "", stayOn: false });
-    const [errors, setErrors] = useState({});
+    const data = initialData;
 
-    const validatorConfig = loginFormValidatorConfig;
-    const isValid = Object.keys(errors).length === 0;
-
-    useEffect(() => {
-        validate();
-    }, [data]);
-
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-    };
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return null;
-
+    const handleSubmit = async (data, setErrors) => {
         try {
             await signIn(data);
             history.replace("/");
@@ -37,42 +25,34 @@ const LoginForm = () => {
             setErrors(error);
         }
     };
-    const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <FormComponent
+            onSubmit={handleSubmit}
+            validatorConfig={loginFormValidatorConfig}
+            defaultData={ data }
+        >
             <TextField
                 id="email"
                 name="email"
                 label="Email"
-                value={data.email}
-                onChange={handleChange}
-                error={errors.email}
+                autoFocus
             />
             <TextField
                 id="password"
                 name="password"
                 label="Пароль"
                 type="password"
-                value={data.password}
-                onChange={handleChange}
-                error={errors.password}
             />
             <CheckBoxField
-                value={data.stayOn}
                 name="stayOn"
-                onChange={handleChange}
             >
                 Оставаться в системе
             </CheckBoxField>
-            <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">
-                            Submit
+            <button className="btn btn-primary w-100 mx-auto">
+                Submit
             </button>
-        </form>
+        </FormComponent>
     );
 };
 

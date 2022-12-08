@@ -22,7 +22,7 @@ const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => 
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
-        onSubmit(data);
+        onSubmit(data, setErrors);
     }, [data]);
     const handleKeyDown = useCallback((event) => {
         if (event.keyCode === 13) {
@@ -58,6 +58,9 @@ const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => 
                 error: errors[child.props.name],
                 onKeyDown: handleKeyDown
             };
+            if (child.type.name === "CheckBoxField") {
+                config.value = data[child.props.name];
+            }
         }
         if (childType === "string") {
             if (child.type === "button") {
