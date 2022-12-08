@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
@@ -9,10 +9,10 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import Searchbar from "../../common/Searchbar";
 import { useFilter } from "../../../hooks/useFilter";
-import { useUser } from "../../../hooks/useUser";
+import { useUsers } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
-    const { users, isLoading } = useUser();
+    const { users, isLoading } = useUsers();
 
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
@@ -22,7 +22,7 @@ const UsersListPage = () => {
     const pageSize = 8;
 
     const handleDelete = (userId) => {
-        console.log(userId);
+        // console.log(userId);
     };
     const handleToggleBookMark = (id) => {
         const newArray = users.map((user) => {

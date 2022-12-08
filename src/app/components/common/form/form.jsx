@@ -6,10 +6,6 @@ const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => 
     const [data, setData] = useState(defaultData || {});
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        console.log("data---------", data);
-    }, [data]);
-
     const validate = useCallback((data) => {
         const errors = validator(data, validatorConfig);
         setErrors(errors);

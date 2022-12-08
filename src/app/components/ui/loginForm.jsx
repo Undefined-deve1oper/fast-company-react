@@ -3,8 +3,12 @@ import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { loginFormValidatorConfig } from "../../utils/validatorConfig";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginForm = () => {
+    const history = useHistory();
+    const { signIn } = useAuth();
     const [data, setData] = useState({ email: "", password: "", stayOn: false });
     const [errors, setErrors] = useState({});
 
@@ -21,10 +25,17 @@ const LoginForm = () => {
             [target.name]: target.value
         }));
     };
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
+
+        try {
+            await signIn(data);
+            history.replace("/");
+        } catch (error) {
+            setErrors(error);
+        }
     };
     const validate = () => {
         const errors = validator(data, validatorConfig);

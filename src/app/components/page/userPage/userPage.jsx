@@ -4,10 +4,10 @@ import UserCard from "../../ui/userCard";
 import QualitiesCard from "../../ui/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
 import Comments from "../../ui/comments";
-import { useUser } from "../../../hooks/useUser";
+import { useUsers } from "../../../hooks/useUsers";
 
 const UserPage = ({ id }) => {
-    const { getUserById } = useUser();
+    const { getUserById } = useUsers();
     const user = getUserById(id);
 
     if (user) {
