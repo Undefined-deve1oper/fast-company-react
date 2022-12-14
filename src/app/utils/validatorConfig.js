@@ -15,11 +15,6 @@ export const editUserValidatorConfig = {
 };
 
 export const addCommentValidatorConfig = {
-    userId: {
-        isRequired: {
-            message: "Выберите от чьего имени вы хотите отправить сообщение"
-        }
-    },
     content: {
         isRequired: {
             message: "Сообщение не может быть пустым"
@@ -28,6 +23,15 @@ export const addCommentValidatorConfig = {
 };
 
 export const registerFormValidatorConfig = {
+    name: {
+        isRequired: {
+            message: "Имя обязателено для заполнения"
+        },
+        min: {
+            message: `Имя должено состоять минимум из 2 символов`,
+            value: 2
+        }
+    },
     email: {
         isRequired: {
             message: "Email обязателен для заполнения"
@@ -67,9 +71,6 @@ export const loginFormValidatorConfig = {
     email: {
         isRequired: {
             message: "Email обязателен для заполнения"
-        },
-        isEmail: {
-            message: "Email введен не корректно"
         }
     },
     password: {

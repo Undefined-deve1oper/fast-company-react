@@ -5,7 +5,7 @@ import FormComponent, { MultiSelectField, RadioField, SelectField, TextField } f
 import { editUserValidatorConfig } from "../../../utils/validatorConfig";
 import { useProfessions } from "../../../hooks/useProfession";
 import { useQualities } from "../../../hooks/useQualities";
-import { useUsers } from "../../../hooks/useUsers";
+import { useUser } from "../../../hooks/useUser";
 
 const initialState = {
     name: "",
@@ -17,7 +17,7 @@ const initialState = {
 
 const EditUserPage = () => {
     const { userId } = useParams();
-    const { getUserById, isLoading: userLoading, updateUser } = useUsers();
+    const { getUserById, isLoading: userLoading, updateUser } = useUser();
     const history = useHistory();
     const [data, setData] = useState(initialState);
     const { professions, isLoading: professionsLoading } = useProfessions();

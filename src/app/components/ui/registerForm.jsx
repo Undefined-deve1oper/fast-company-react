@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import FormComponent from "../common/form";
 
 const initialData = {
+    name: "",
     email: "",
     password: "",
     profession: "",
@@ -23,6 +24,7 @@ const initialData = {
 const RegisterForm = () => {
     const history = useHistory();
     const data = initialData;
+    const validatorConfig = registerFormValidatorConfig;
     const { signUp } = useAuth();
     const { qualities } = useQualities();
     const { professions } = useProfessions();
@@ -43,7 +45,7 @@ const RegisterForm = () => {
     return (
         <FormComponent
             onSubmit={ handleSubmit }
-            validatorConfig={registerFormValidatorConfig}
+            validatorConfig={validatorConfig}
             defaultData={ data }
         >
             <TextField
@@ -51,6 +53,11 @@ const RegisterForm = () => {
                 name="email"
                 label="Email"
                 autoFocus
+            />
+            <TextField
+                id="name"
+                name="name"
+                label="Имя"
             />
             <TextField
                 id="password"

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { validator } from "../../../utils/validator";
 
-const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => {
+const FormComponent = ({ children, validatorConfig, onSubmit, onChange, defaultData }) => {
     const [data, setData] = useState(defaultData || {});
     const [errors, setErrors] = useState({});
 
@@ -17,12 +17,13 @@ const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => 
             ...prevState,
             [target.name]: target.value
         }));
+        onChange && onChange();
     }, []);
     const handleSubmit = useCallback((event) => {
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
-        onSubmit(data, setErrors);
+        onSubmit(data);
     }, [data]);
     const handleKeyDown = useCallback((event) => {
         if (event.keyCode === 13) {
@@ -68,7 +69,7 @@ const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => 
                     child.props.type === "submit" ||
                     child.props.type === undefined
                 ) {
-                    config = { ...child.props, disabled: !isValid };
+                    config = { ...child.props, disabled: !isValid || child.props.disabled };
                 }
             }
         }
@@ -86,7 +87,8 @@ FormComponent.propTypes = {
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
     defaultData: PropTypes.object,
     validatorConfig: PropTypes.object,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    onChange: PropTypes.func
 };
 
 export default FormComponent;

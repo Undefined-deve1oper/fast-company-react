@@ -4,10 +4,11 @@ import UserCard from "../../ui/userCard";
 import QualitiesCard from "../../ui/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
 import Comments from "../../ui/comments";
-import { useUsers } from "../../../hooks/useUsers";
+import { useUser } from "../../../hooks/useUser";
+import { CommentsProvider } from "../../../hooks/useComments";
 
 const UserPage = ({ id }) => {
-    const { getUserById } = useUsers();
+    const { getUserById } = useUser();
     const user = getUserById(id);
 
     if (user) {
@@ -21,7 +22,9 @@ const UserPage = ({ id }) => {
                     </div>
 
                     <div className="col-md-8">
-                        <Comments/>
+                        <CommentsProvider>
+                            <Comments/>
+                        </CommentsProvider>
                     </div>
                 </div>
             </div>

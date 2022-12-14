@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const UserContext = React.createContext();
 
-export const useUsers = () => {
+export const useUser = () => {
     return useContext(UserContext);
 };
 
@@ -45,8 +45,8 @@ const UserProvider = ({ children }) => {
             setLoading(false);
         }
     }
-    function getUserById(id) {
-        return users.find((user) => user._id === id);
+    function getUserById(userId) {
+        return users.find((user) => user._id === userId);
     }
 
     function errorCatcher(error) {
