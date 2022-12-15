@@ -8,7 +8,7 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import Searchbar from "../../common/Searchbar";
 import { useFilter } from "../../../hooks/useFilter";
-import { useUser } from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/useUsers";
 import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
 

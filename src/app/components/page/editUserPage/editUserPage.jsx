@@ -5,7 +5,7 @@ import FormComponent, { MultiSelectField, RadioField, SelectField, TextField } f
 import { editUserValidatorConfig } from "../../../utils/validatorConfig";
 import { useProfessions } from "../../../hooks/useProfession";
 import { useQualities } from "../../../hooks/useQualities";
-import { useUser } from "../../../hooks/useUser";
+import { useAuth } from "../../../hooks/useAuth";
 
 const initialState = {
     name: "",
@@ -16,44 +16,54 @@ const initialState = {
 };
 
 const EditUserPage = () => {
-    const { userId } = useParams();
-    const { getUserById, isLoading: userLoading, updateUser } = useUser();
     const history = useHistory();
-    const [data, setData] = useState(initialState);
+    const { userId } = useParams();
+    const { currentUser, updateUserData } = useAuth();
     const { professions, isLoading: professionsLoading } = useProfessions();
     const { qualities, getQuality, isLoading: qualitiesLoading } = useQualities();
+    const [data, setData] = useState(initialState);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!userLoading) {
-            const user = getUserById(userId);
-            setData(prevState => ({
-                ...prevState,
-                ...user,
-                qualities: transformData(user.qualities.map((item) => getQuality(item)))
-            }));
+        if (userId !== currentUser._id) {
+            history.push(`/users/${currentUser._id}/edit`);
         }
     }, []);
+    useEffect(() => {
+        setLoading(true);
+        if (!qualitiesLoading && currentUser) {
+            setData((prevState) => ({
+                ...prevState,
+                ...currentUser,
+                qualities: transformData(currentUser.qualities.map((item) => getQuality(item)))
+            }));
+        }
+    }, [currentUser, qualitiesLoading]);
+    useEffect(() => {
+        if (data._id) setLoading(false);
+    }, [data]);
 
     const dataQualities = (elements) => {
         return elements.map((quality) => quality.value);
     };
     const handleSubmit = (data) => {
-        const { profession, qualities, _id } = data;
+        const { profession, qualities } = data;
         const updatedData = {
             ...data,
             profession: profession,
             qualities: dataQualities(qualities)
         };
-        updateUser(userId, updatedData).then(() => history.push(`/users/${_id}`));
+        updateUserData(updatedData);
+        history.push(`/users/${userId}`);
     };
     const transformData = (data) => {
         return data.map((item) => ({ label: item.name, value: item._id, color: item.color }));
     };
 
-    const isLoading = !professionsLoading && !qualitiesLoading && JSON.stringify(data) === JSON.stringify(initialState);
+    const isEverythingIsLoaded = !isLoading && !professionsLoading && !qualitiesLoading;
 
-    if (isLoading) {
-        return <h1>Loading...</h1>;
+    if (!isEverythingIsLoaded) {
+        return <p>Loading...</p>;
     }
 
     return (
@@ -100,7 +110,7 @@ const EditUserPage = () => {
                             type="submit"
                             className="btn btn-primary w-100 mx-auto"
                         >
-                                Обновить
+                            Обновить
                         </button>
                     </FormComponent>
                 </div>

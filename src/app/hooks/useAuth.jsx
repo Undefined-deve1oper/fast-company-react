@@ -91,10 +91,6 @@ const AuthProvider = ({ children }) => {
             errorCatcher(error);
         }
     }
-    function errorCatcher(error) {
-        const { message } = error.response.data;
-        setError(message);
-    }
     async function getUserData() {
         try {
             const { content } = await userService.getCurrentUser();
@@ -104,6 +100,21 @@ const AuthProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
+    }
+    async function updateUserData(data) {
+        try {
+            setLoading(true);
+            const { content } = await userService.update(data);
+            setUser(content);
+        } catch (error) {
+            errorCatcher(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    function errorCatcher(error) {
+        const { message } = error.response.data;
+        setError(message);
     }
 
     useEffect(() => {
@@ -121,7 +132,7 @@ const AuthProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <AuthContext.Provider value={{ signIn, signUp, logOut, currentUser }}>
+        <AuthContext.Provider value={{ signIn, signUp, logOut, currentUser, updateUserData, isLoading }}>
             {!isLoading ? children : "Loading..."}
         </AuthContext.Provider>
     );

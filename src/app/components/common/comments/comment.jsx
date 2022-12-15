@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { displayDate } from "../../../utils/displayDate";
-import { useUser } from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/useUsers";
 import { useAuth } from "../../../hooks/useAuth";
 
 const Comment = ({
