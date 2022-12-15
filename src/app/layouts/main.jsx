@@ -16,7 +16,7 @@ const Main = () => {
                 <li>progress: {progress}%</li>
                 {error && <li>error: {error}</li>}
             </ul>
-            <button className="btn btn-primary" onClick={handleClick}>
+            <button disabled={true} className="btn btn-primary" onClick={handleClick}>
                 {" "}
                 Инициализировать
             </button>

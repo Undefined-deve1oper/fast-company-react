@@ -24,6 +24,13 @@ const EditUserPage = () => {
     const [data, setData] = useState(initialState);
     const [isLoading, setLoading] = useState(true);
 
+    const transformData = (data) => {
+        return data.map((item) => ({ label: item.name, value: item._id, color: item.color }));
+    };
+    const dataQualities = (elements) => {
+        return elements.map((quality) => quality.value);
+    };
+
     useEffect(() => {
         if (userId !== currentUser._id) {
             history.push(`/users/${currentUser._id}/edit`);
@@ -43,9 +50,6 @@ const EditUserPage = () => {
         if (data._id) setLoading(false);
     }, [data]);
 
-    const dataQualities = (elements) => {
-        return elements.map((quality) => quality.value);
-    };
     const handleSubmit = (data) => {
         const { profession, qualities } = data;
         const updatedData = {
@@ -55,9 +59,6 @@ const EditUserPage = () => {
         };
         updateUserData(updatedData);
         history.push(`/users/${userId}`);
-    };
-    const transformData = (data) => {
-        return data.map((item) => ({ label: item.name, value: item._id, color: item.color }));
     };
 
     const isEverythingIsLoaded = !isLoading && !professionsLoading && !qualitiesLoading;

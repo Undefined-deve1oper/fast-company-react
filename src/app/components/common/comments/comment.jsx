@@ -32,7 +32,7 @@ const Comment = ({
                                 <div className="d-flex justify-content-between align-items-center">
                                     <p className="mb-1 ">
                                         { user && user.name }
-                                        <span className="small">
+                                        <span className="small">{" "}
                                             - { displayDate(created) }
                                         </span>
                                     </p>
