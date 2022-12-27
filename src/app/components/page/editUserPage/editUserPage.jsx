@@ -3,9 +3,10 @@ import { useHistory, useParams } from "react-router-dom";
 import BackHistoryButton from "../../common/backButton";
 import FormComponent, { MultiSelectField, RadioField, SelectField, TextField } from "../../common/form";
 import { editUserValidatorConfig } from "../../../utils/validatorConfig";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useQualities } from "../../../hooks/useQualities";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
+import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professions";
 
 const initialState = {
     name: "",
@@ -19,10 +20,12 @@ const EditUserPage = () => {
     const history = useHistory();
     const { userId } = useParams();
     const { currentUser, updateUserData } = useAuth();
-    const { professions, isLoading: professionsLoading } = useProfessions();
-    const { qualities, getQuality, isLoading: qualitiesLoading } = useQualities();
     const [data, setData] = useState(initialState);
     const [isLoading, setLoading] = useState(true);
+    const qualities = useSelector(getQualities());
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
 
     const transformData = (data) => {
         return data.map((item) => ({ label: item.name, value: item._id, color: item.color }));
@@ -30,6 +33,9 @@ const EditUserPage = () => {
     const dataQualities = (elements) => {
         return elements.map((quality) => quality.value);
     };
+    function getQualitiesListByIds(qualitiesIds) {
+        return qualities.filter((quality) => qualitiesIds.includes(quality._id));
+    }
 
     useEffect(() => {
         if (userId !== currentUser._id) {
@@ -42,7 +48,7 @@ const EditUserPage = () => {
             setData((prevState) => ({
                 ...prevState,
                 ...currentUser,
-                qualities: transformData(currentUser.qualities.map((item) => getQuality(item)))
+                qualities: transformData(getQualitiesListByIds(currentUser.qualities))
             }));
         }
     }, [currentUser, qualitiesLoading]);
