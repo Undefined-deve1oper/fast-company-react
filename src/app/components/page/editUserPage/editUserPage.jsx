@@ -50,14 +50,14 @@ const EditUserPage = () => {
         if (data._id) setLoading(false);
     }, [data]);
 
-    const handleSubmit = (data) => {
+    const handleSubmit = async (data) => {
         const { profession, qualities } = data;
         const updatedData = {
             ...data,
             profession: profession,
             qualities: dataQualities(qualities)
         };
-        updateUserData(updatedData);
+        await updateUserData(updatedData);
         history.push(`/users/${userId}`);
     };
 
