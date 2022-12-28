@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 import commentService from "../services/comment.service";
 
 const commentsSlice = createSlice({
@@ -36,6 +36,9 @@ const commentsSlice = createSlice({
 const { actions, reducer: commentsReducer } = commentsSlice;
 const { commentsRequested, commentsReceived, commentsRequestFailed, commentCreated, commentRemoved } = actions;
 
+const commentCreateRequested = createAction("comments/commentCreateRequested");
+const commentRemoveRequested = createAction("comments/commentRemoveRequested");
+
 export const loadCommentsList = (userId) => async (dispatch) => {
     dispatch(commentsRequested());
     try {
@@ -46,7 +49,7 @@ export const loadCommentsList = (userId) => async (dispatch) => {
     }
 };
 export const createComment = (comment) => async (dispatch) => {
-    dispatch(commentsRequested());
+    dispatch(commentCreateRequested());
     try {
         const { content } = await commentService.createComment(comment);
         dispatch(commentCreated(content));
@@ -55,7 +58,7 @@ export const createComment = (comment) => async (dispatch) => {
     }
 };
 export const removeComment = (commentId) => async (dispatch) => {
-    dispatch(commentsRequested());
+    dispatch(commentRemoveRequested());
     try {
         await commentService.removeComment(commentId);
         dispatch(commentRemoved(commentId));
