@@ -3,8 +3,9 @@ import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { loginFormValidatorConfig } from "../../utils/validatorConfig";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import FormComponent from "../common/form";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/users";
 
 const initialData = {
     email: "",
@@ -14,23 +15,21 @@ const initialData = {
 
 const LoginForm = () => {
     const history = useHistory();
-    const { signIn } = useAuth();
     const data = initialData;
     const validatorConfig = loginFormValidatorConfig;
     const [enterError, setEnterError] = useState(null);
+    const dispatch = useDispatch();
 
     const handleChange = () => {
         setEnterError(null);
     };
 
-    const handleSubmit = async (data) => {
+    const handleSubmit = (data) => {
+        const redirect = history.location.state
+            ? history.location.state.from.pathname
+            : "/";
         try {
-            await signIn(data);
-            history.replace(
-                history.location.state
-                    ? history.location.state.from.pathname
-                    : "/"
-            );
+            dispatch(login({ payload: data, redirect }));
         } catch (error) {
             setEnterError(error.message);
         }
@@ -38,10 +37,10 @@ const LoginForm = () => {
 
     return (
         <FormComponent
-            onSubmit={handleSubmit}
-            validatorConfig={validatorConfig}
+            onSubmit={ handleSubmit }
+            validatorConfig={ validatorConfig }
             defaultData={ data }
-            onChange={handleChange}
+            onChange={ handleChange }
         >
             <TextField
                 id="email"
@@ -60,8 +59,8 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
-            <>{enterError && <p className="text-danger">{enterError}</p>}</>
-            <button disabled={enterError} className="btn btn-primary w-100 mx-auto">
+            <>{ enterError && <p className="text-danger">{ enterError }</p> }</>
+            <button disabled={ enterError } className="btn btn-primary w-100 mx-auto">
                 Submit
             </button>
         </FormComponent>

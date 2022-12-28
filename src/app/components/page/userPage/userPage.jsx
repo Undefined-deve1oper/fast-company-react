@@ -8,7 +8,7 @@ import { CommentsProvider } from "../../../hooks/useComments";
 import { useSelector } from "react-redux";
 import { getUserById } from "../../../store/users";
 
-const UserPage = ({ id: userId }) => {
+const UserPage = ({ userId }) => {
     const user = useSelector(getUserById(userId));
 
     if (user) {
@@ -35,7 +35,7 @@ const UserPage = ({ id: userId }) => {
 };
 
 UserPage.propTypes = {
-    id: PropTypes.string
+    userId: PropTypes.string
 };
 
 export default UserPage;

@@ -7,6 +7,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professions";
+import { getCurrentUserData, getCurrentUserId } from "../../../store/users";
 
 const initialState = {
     name: "",
@@ -19,13 +20,15 @@ const initialState = {
 const EditUserPage = () => {
     const history = useHistory();
     const { userId } = useParams();
-    const { currentUser, updateUserData } = useAuth();
+    const currentUser = useSelector(getCurrentUserData());
+    const { updateUserData } = useAuth();
     const [data, setData] = useState(initialState);
     const [isLoading, setLoading] = useState(true);
     const qualities = useSelector(getQualities());
     const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
+    const currentUserId = useSelector(getCurrentUserId());
 
     const transformData = (data) => {
         return data.map((item) => ({ label: item.name, value: item._id, color: item.color }));
@@ -33,20 +36,21 @@ const EditUserPage = () => {
     const dataQualities = (elements) => {
         return elements.map((quality) => quality.value);
     };
+
     function getQualitiesListByIds(qualitiesIds) {
         return qualities.filter((quality) => qualitiesIds.includes(quality._id));
     }
 
     useEffect(() => {
-        if (userId !== currentUser._id) {
-            history.push(`/users/${currentUser._id}/edit`);
+        if (userId !== currentUserId) {
+            history.push(`/users/${currentUserId}/edit`);
         }
     }, []);
+
     useEffect(() => {
         setLoading(true);
         if (!qualitiesLoading && currentUser) {
             setData((prevState) => ({
-                ...prevState,
                 ...currentUser,
                 qualities: transformData(getQualitiesListByIds(currentUser.qualities))
             }));

@@ -4,10 +4,11 @@ import { useHistory } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessionsById } from "../../store/professions";
+import { getCurrentUserData } from "../../store/users";
 
 const UserCard = ({ user }) => {
     const history = useHistory();
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getCurrentUserData());
     const profession = useSelector(getProfessionsById(user.profession));
 
     const handleClick = () => {

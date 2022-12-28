@@ -8,15 +8,14 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import Searchbar from "../../common/Searchbar";
 import { useFilter } from "../../../hooks/useFilter";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professions";
-import { getUsersList } from "../../../store/users";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
     const users = useSelector(getUsersList());
 
-    const { currentUser } = useAuth();
+    const currentUserId = useSelector(getCurrentUserId());
 
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
@@ -56,71 +55,73 @@ const UsersListPage = () => {
         setSortBy(item);
     };
 
-    function filterUsers(data) {
-        const searchedUsers = useFilter(data, searchQuery);
-        const selectedUsersProf = selectedProf
-            ? data.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
-            : data;
+    if (users) {
+        function filterUsers(data) {
+            const searchedUsers = useFilter(data, searchQuery);
+            const selectedUsersProf = selectedProf
+                ? data.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
+                : data;
 
-        const filteredUsers = searchQuery
-            ? searchedUsers // Список юзеров отфильтрованных по поиску
-            : selectedUsersProf; // Список юзеров отфильтрованных по професси
+            const filteredUsers = searchQuery
+                ? searchedUsers // Список юзеров отфильтрованных по поиску
+                : selectedUsersProf; // Список юзеров отфильтрованных по професси
 
-        return filteredUsers.filter((user) => user._id !== currentUser._id);
-    }
+            return filteredUsers.filter((user) => user._id !== currentUserId);
+        }
 
-    const filteredUsers = filterUsers(users);
+        const filteredUsers = filterUsers(users);
 
-    const count = filteredUsers.length;
-    const sortedUsers = _.orderBy(
-        filteredUsers,
-        [sortBy.path],
-        [sortBy.order]
-    );
-    const usersCrop = paginate(sortedUsers, currentPage, pageSize);
-    const clearFilter = () => {
-        setSelectedProf();
-    };
+        const count = filteredUsers.length;
+        const sortedUsers = _.orderBy(
+            filteredUsers,
+            [sortBy.path],
+            [sortBy.order]
+        );
+        const usersCrop = paginate(sortedUsers, currentPage, pageSize);
+        const clearFilter = () => {
+            setSelectedProf();
+        };
 
-    return (
-        <div className="d-flex">
-            { professions && !professionsLoading && (
-                <div className="d-flex flex-column flex-shrink-0 p-3">
-                    <GroupList
-                        selectedItem={ selectedProf }
-                        items={ professions }
-                        onItemSelect={ handleProfessionSelect }
-                    />
-                    <button
-                        className="btn btn-secondary mt-2"
-                        onClick={ clearFilter }
-                    >
-                        Очистить
-                    </button>
-                </div>
-            ) }
-            <div className="d-flex flex-column">
-                <SearchStatus length={ count }/>
-                <Searchbar value={ searchQuery } onChange={ handleSearchQuery }/>
-                { count > 0 && (
-                    <UserTable
-                        users={ usersCrop }
-                        onSort={ handleSort }
-                        selectedSort={ sortBy }
-                        onToggleBookMark={ handleToggleBookMark }
-                    />
+        return (
+            <div className="d-flex">
+                { professions && !professionsLoading && (
+                    <div className="d-flex flex-column flex-shrink-0 p-3">
+                        <GroupList
+                            selectedItem={ selectedProf }
+                            items={ professions }
+                            onItemSelect={ handleProfessionSelect }
+                        />
+                        <button
+                            className="btn btn-secondary mt-2"
+                            onClick={ clearFilter }
+                        >
+                            Очистить
+                        </button>
+                    </div>
                 ) }
-                <div className="d-flex justify-content-center">
-                    <Pagination
-                        itemsCount={ count }
-                        pageSize={ pageSize }
-                        currentPage={ currentPage }
-                        onPageChange={ handlePageChange }
-                    />
+                <div className="d-flex flex-column">
+                    <SearchStatus length={ count }/>
+                    <Searchbar value={ searchQuery } onChange={ handleSearchQuery }/>
+                    { count > 0 && (
+                        <UserTable
+                            users={ usersCrop }
+                            onSort={ handleSort }
+                            selectedSort={ sortBy }
+                            onToggleBookMark={ handleToggleBookMark }
+                        />
+                    ) }
+                    <div className="d-flex justify-content-center">
+                        <Pagination
+                            itemsCount={ count }
+                            pageSize={ pageSize }
+                            currentPage={ currentPage }
+                            onPageChange={ handlePageChange }
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    }
 };
 UsersListPage.propTypes = {
     users: PropTypes.array
