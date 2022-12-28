@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { loginFormValidatorConfig } from "../../utils/validatorConfig";
 import { useHistory } from "react-router-dom";
 import FormComponent from "../common/form";
-import { useDispatch } from "react-redux";
-import { login } from "../../store/users";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthError, login } from "../../store/users";
 
 const initialData = {
     email: "",
@@ -16,23 +16,15 @@ const initialData = {
 const LoginForm = () => {
     const history = useHistory();
     const data = initialData;
+    const loginError = useSelector(getAuthError());
     const validatorConfig = loginFormValidatorConfig;
-    const [enterError, setEnterError] = useState(null);
     const dispatch = useDispatch();
-
-    const handleChange = () => {
-        setEnterError(null);
-    };
 
     const handleSubmit = (data) => {
         const redirect = history.location.state
             ? history.location.state.from.pathname
             : "/";
-        try {
-            dispatch(login({ payload: data, redirect }));
-        } catch (error) {
-            setEnterError(error.message);
-        }
+        dispatch(login({ payload: data, redirect }));
     };
 
     return (
@@ -40,7 +32,6 @@ const LoginForm = () => {
             onSubmit={ handleSubmit }
             validatorConfig={ validatorConfig }
             defaultData={ data }
-            onChange={ handleChange }
         >
             <TextField
                 id="email"
@@ -59,8 +50,8 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
-            <>{ enterError && <p className="text-danger">{ enterError }</p> }</>
-            <button disabled={ enterError } className="btn btn-primary w-100 mx-auto">
+            <>{ loginError && <p className="text-danger">{ loginError }</p> }</>
+            <button className="btn btn-primary w-100 mx-auto">
                 Submit
             </button>
         </FormComponent>
