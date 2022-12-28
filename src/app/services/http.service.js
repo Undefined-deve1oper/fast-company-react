@@ -16,12 +16,12 @@ http.interceptors.request.use(
             const expiresDate = localStorageService.getTokenExpiresDate();
             const refreshToken = localStorageService.getRefreshToken();
             if (refreshToken && expiresDate > Date.now()) {
-                const data = authService.refresh();
+                const data = await authService.refresh();
 
                 localStorageService.setTokens({
                     refreshToken: data.refresh_token,
                     idToken: data.id_token,
-                    expiresIn: data.expires_in,
+                    expiresIn: data.expires_id,
                     localId: data.user_id
                 });
             }

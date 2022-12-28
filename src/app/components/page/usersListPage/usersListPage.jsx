@@ -14,7 +14,6 @@ import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
     const users = useSelector(getUsersList());
-
     const currentUserId = useSelector(getCurrentUserId());
 
     const professions = useSelector(getProfessions());

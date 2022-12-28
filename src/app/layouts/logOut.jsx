@@ -6,7 +6,7 @@ const LogOut = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(logOut);
+        dispatch(logOut());
     }, []);
 
     return (

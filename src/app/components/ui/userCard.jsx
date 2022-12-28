@@ -1,15 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
-import { getProfessionsById } from "../../store/professions";
+import { getProfessionById } from "../../store/professions";
 import { getCurrentUserData } from "../../store/users";
 
 const UserCard = ({ user }) => {
     const history = useHistory();
     const currentUser = useSelector(getCurrentUserData());
-    const profession = useSelector(getProfessionsById(user.profession));
+    const profession = useSelector(getProfessionById(user.profession));
 
     const handleClick = () => {
         history.push(history.location.pathname + "/edit");
