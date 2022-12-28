@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import api from "../../../api";
 import UserCard from "../../ui/userCard";
 import QualitiesCard from "../../ui/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
 import Comments from "../../ui/comments";
+import { getUserById } from "../../../store/users";
 
-const UserPage = ({ id }) => {
-    const [user, setUser] = useState();
-
-    useEffect(() => {
-        api.users.getById(id).then((data) => setUser(data));
-    }, []);
+const UserPage = ({ userId }) => {
+    const user = useSelector(getUserById(userId));
 
     if (user) {
         return (
@@ -35,7 +32,7 @@ const UserPage = ({ id }) => {
 };
 
 UserPage.propTypes = {
-    id: PropTypes.string
+    userId: PropTypes.string
 };
 
 export default UserPage;

@@ -2,27 +2,29 @@ import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { validator } from "../../../utils/validator";
 
-const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => {
+const FormComponent = ({ children, validatorConfig, onSubmit, onChange, defaultData }) => {
     const [data, setData] = useState(defaultData || {});
     const [errors, setErrors] = useState({});
+
+    const validate = useCallback((data) => {
+        const errors = validator(data, validatorConfig);
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    }, [validatorConfig, setErrors]);
 
     const handleChange = useCallback((target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
+        onChange && onChange();
     }, []);
-    const validate = useCallback((data) => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    }, [validatorConfig, setErrors]);
-    const handleSubmit = (event) => {
+    const handleSubmit = useCallback((event) => {
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
         onSubmit(data);
-    };
+    }, [data]);
     const handleKeyDown = useCallback((event) => {
         if (event.keyCode === 13) {
             event.preventDefault();
@@ -57,6 +59,9 @@ const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => 
                 error: errors[child.props.name],
                 onKeyDown: handleKeyDown
             };
+            if (child.type.name === "CheckBoxField") {
+                config.value = data[child.props.name];
+            }
         }
         if (childType === "string") {
             if (child.type === "button") {
@@ -64,7 +69,7 @@ const FormComponent = ({ children, validatorConfig, onSubmit, defaultData }) => 
                     child.props.type === "submit" ||
                     child.props.type === undefined
                 ) {
-                    config = { ...child.props, disabled: !isValid };
+                    config = { ...child.props, disabled: !isValid || child.props.disabled };
                 }
             }
         }
@@ -82,7 +87,8 @@ FormComponent.propTypes = {
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
     defaultData: PropTypes.object,
     validatorConfig: PropTypes.object,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    onChange: PropTypes.func
 };
 
 export default FormComponent;

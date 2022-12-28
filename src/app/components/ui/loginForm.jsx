@@ -1,90 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { validator } from "../../utils/validator";
+import React from "react";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
+import { loginFormValidatorConfig } from "../../utils/validatorConfig";
+import { useHistory } from "react-router-dom";
+import FormComponent from "../common/form";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthError, login } from "../../store/users";
+
+const initialData = {
+    email: "",
+    password: "",
+    stayOn: false
+};
 
 const LoginForm = () => {
-    const [data, setData] = useState({ email: "", password: "", stayOn: false });
-    const [errors, setErrors] = useState({});
+    const history = useHistory();
+    const data = initialData;
+    const loginError = useSelector(getAuthError());
+    const validatorConfig = loginFormValidatorConfig;
+    const dispatch = useDispatch();
 
-    const validatorConfig = {
-        email: {
-            isRequired: {
-                message: "Email обязателен для заполнения"
-            },
-            isEmail: {
-                message: "Email введен не корректно"
-            }
-        },
-        password: {
-            isRequired: {
-                message: "Пароль обязателен для заполнения"
-            },
-            isCapitalSymbol: {
-                message: "Пароль должен содержать хотя бы одну заглавную букву"
-            },
-            isContainDigit: {
-                message: "Пароль должен содержать хотя бы одно число"
-            },
-            min: {
-                message: `Пароль должен состоять минимум из 8 символов`,
-                value: 8
-            }
-        }
-    };
-    const isValid = Object.keys(errors).length === 0;
-
-    useEffect(() => {
-        validate();
-    }, [data]);
-
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-    };
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return null;
-    };
-    const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
+    const handleSubmit = (data) => {
+        const redirect = history.location.state
+            ? history.location.state.from.pathname
+            : "/";
+        dispatch(login({ payload: data, redirect }));
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <FormComponent
+            onSubmit={ handleSubmit }
+            validatorConfig={ validatorConfig }
+            defaultData={ data }
+        >
             <TextField
                 id="email"
                 name="email"
                 label="Email"
-                value={data.email}
-                onChange={handleChange}
-                error={errors.email}
+                autoFocus
             />
             <TextField
                 id="password"
                 name="password"
                 label="Пароль"
                 type="password"
-                value={data.password}
-                onChange={handleChange}
-                error={errors.password}
             />
             <CheckBoxField
-                value={data.stayOn}
                 name="stayOn"
-                onChange={handleChange}
             >
                 Оставаться в системе
             </CheckBoxField>
-            <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">
-                            Submit
+            <>{ loginError && <p className="text-danger">{ loginError }</p> }</>
+            <button className="btn btn-primary w-100 mx-auto">
+                Submit
             </button>
-        </form>
+        </FormComponent>
     );
 };
 

@@ -16,6 +16,7 @@ const CheckBoxField = ({ name, value, onChange, children, error, ...rest }) => {
                 type="checkbox"
                 value=""
                 id={ name }
+                name={name}
                 checked={value}
                 onChange={handleChange}
                 {...rest}
