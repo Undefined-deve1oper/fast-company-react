@@ -16,7 +16,7 @@ const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
 
     return (
         <div className="mb-4">
-            <label htmlFor={name}> { label }</label>
+            <label htmlFor={name}> {label}</label>
             <div className={`input-group ${error ? "has-validation" : ""}`}>
                 <input
                     type={showPassword ? "text" : type}
@@ -28,7 +28,11 @@ const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
                     {...rest}
                 />
                 {type === "password" && (
-                    <button className="btn btn-outline-secondary" type="button" onClick={toggleShowPassword}>
+                    <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={toggleShowPassword}
+                    >
                         <i
                             className={
                                 "bi bi-eye" + (showPassword ? "-slash" : "")
@@ -36,7 +40,7 @@ const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
                         ></i>
                     </button>
                 )}
-                {error && (<div className="invalid-feedback">{error}</div>)}
+                {error && <div className="invalid-feedback">{error}</div>}
             </div>
         </div>
     );

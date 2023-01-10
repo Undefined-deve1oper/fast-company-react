@@ -13,10 +13,10 @@ const store = createStore();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <Provider store={ store }>
+    <Provider store={store}>
         <Router history={history}>
             <React.StrictMode>
-                <App/>
+                <App />
             </React.StrictMode>
         </Router>
     </Provider>

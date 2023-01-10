@@ -3,30 +3,9 @@ module.exports = {
         browser: true,
         es2021: true
     },
-    extends: ["plugin:react/recommended", "standard"],
-    parserOptions: {
-        ecmaFeatures: {
-            jsx: true
-        },
-        ecmaVersion: 12,
-        sourceType: "module"
-    },
-    plugins: ["react"],
+    extends: ["react-app", "react-app/jest"],
+    plugins: ["prettier"],
     rules: {
-        semi: [2, "always"],
-        indent: ["error", 4],
-        "space-before-function-paren": [
-            "error",
-            { anonymous: "always", named: "never" }
-        ],
-        "multiline-ternary": ["off"],
-        quotes: [
-            "error",
-            "double",
-            {
-                allowTemplateLiterals: true,
-                avoidEscape: true
-            }
-        ]
+        "prettier/prettier": 2
     }
 };

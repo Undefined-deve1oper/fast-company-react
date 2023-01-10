@@ -15,7 +15,9 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
     const handleCaret = (column) => {
         if (columns[column].path === selectedSort.path) {
             const isAsc = selectedSort.order === "asc";
-            return (<i className={`bi bi-caret-${isAsc ? "up" : "down"}-fill`}></i>);
+            return (
+                <i className={`bi bi-caret-${isAsc ? "up" : "down"}-fill`}></i>
+            );
         }
     };
 

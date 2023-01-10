@@ -18,7 +18,7 @@ const useMockData = () => {
     const summuryCount = profession.length + qualities.length + users.length;
 
     const incrementCount = () => {
-        setCount(prevState => prevState + 1);
+        setCount((prevState) => prevState + 1);
     };
     const updateProgress = () => {
         if (count !== 0 && status === statusConsts.idle) {
@@ -54,7 +54,7 @@ const useMockData = () => {
             setError(error);
             setStatus(statusConsts.error);
         }
-    };
+    }
 
     return { error, initialize, progress, status };
 };

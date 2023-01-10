@@ -2,7 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
 
-const MultiSelectField = ({ options, onChange, name, label, defaultValue, ...rest }) => {
+const MultiSelectField = ({
+    options,
+    onChange,
+    name,
+    label,
+    defaultValue,
+    ...rest
+}) => {
     const handleChange = (value) => {
         onChange({ name, value });
     };

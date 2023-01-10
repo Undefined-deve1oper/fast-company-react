@@ -26,8 +26,12 @@ const NavProfile = () => {
                 />
             </div>
             <div className={"w-100 dropdown-menu" + (isOpen ? " show" : "")}>
-                <Link className="dropdown-item" to={`/users/${currentUserId}`}>Profile</Link>
-                <Link className="dropdown-item" to="/logout">Log Out</Link>
+                <Link className="dropdown-item" to={`/users/${currentUserId}`}>
+                    Profile
+                </Link>
+                <Link className="dropdown-item" to="/logout">
+                    Log Out
+                </Link>
             </div>
         </div>
     );

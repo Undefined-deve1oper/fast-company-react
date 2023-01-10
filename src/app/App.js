@@ -14,17 +14,20 @@ function App() {
     return (
         <div>
             <AppLoader>
-                <NavBar/>
+                <NavBar />
 
                 <Switch>
-                    <ProtectedRoute path="/users/:userId?/:edit?" component={ Users }/>
-                    <Route path="/login/:type?" component={ Login }/>
-                    <Route path="/logout" component={ LogOut }/>
-                    <Route path="/" exact={ true } component={ Main }/>
-                    <Redirect to="/"/>
+                    <ProtectedRoute
+                        path="/users/:userId?/:edit?"
+                        component={Users}
+                    />
+                    <Route path="/login/:type?" component={Login} />
+                    <Route path="/logout" component={LogOut} />
+                    <Route path="/" exact={true} component={Main} />
+                    <Redirect to="/" />
                 </Switch>
 
-                <ToastContainer/>
+                <ToastContainer />
             </AppLoader>
         </div>
     );

@@ -12,20 +12,26 @@ const NavBar = () => {
             <div className="container-fluid">
                 <ul className="nav">
                     <li className="nav-item">
-                        <Link className="nav-link active" to="/">Main</Link>
+                        <Link className="nav-link active" to="/">
+                            Main
+                        </Link>
                     </li>
-                    { isLoggedIn && (
+                    {isLoggedIn && (
                         <li className="nav-item">
-                            <Link className="nav-link active" to="/users">Users</Link>
+                            <Link className="nav-link active" to="/users">
+                                Users
+                            </Link>
                         </li>
-                    ) }
+                    )}
                 </ul>
                 <div className="d-flex">
-                    { isLoggedIn ? (
-                        <NavProfile/>
+                    {isLoggedIn ? (
+                        <NavProfile />
                     ) : (
-                        <Link className="nav-link active" to="/login">Login</Link>
-                    ) }
+                        <Link className="nav-link active" to="/login">
+                            Login
+                        </Link>
+                    )}
                 </div>
             </div>
         </nav>

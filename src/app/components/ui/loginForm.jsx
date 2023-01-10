@@ -29,31 +29,20 @@ const LoginForm = () => {
 
     return (
         <FormComponent
-            onSubmit={ handleSubmit }
-            validatorConfig={ validatorConfig }
-            defaultData={ data }
+            onSubmit={handleSubmit}
+            validatorConfig={validatorConfig}
+            defaultData={data}
         >
-            <TextField
-                id="email"
-                name="email"
-                label="Email"
-                autoFocus
-            />
+            <TextField id="email" name="email" label="Email" autoFocus />
             <TextField
                 id="password"
                 name="password"
                 label="Пароль"
                 type="password"
             />
-            <CheckBoxField
-                name="stayOn"
-            >
-                Оставаться в системе
-            </CheckBoxField>
-            <>{ loginError && <p className="text-danger">{ loginError }</p> }</>
-            <button className="btn btn-primary w-100 mx-auto">
-                Submit
-            </button>
+            <CheckBoxField name="stayOn">Оставаться в системе</CheckBoxField>
+            <>{loginError && <p className="text-danger">{loginError}</p>}</>
+            <button className="btn btn-primary w-100 mx-auto">Submit</button>
         </FormComponent>
     );
 };

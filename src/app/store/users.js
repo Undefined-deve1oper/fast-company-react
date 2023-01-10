@@ -6,21 +6,23 @@ import getRandomInt from "../utils/getRandomInt";
 import history from "../utils/history";
 import { generateAuthError } from "../utils/generateAuthError";
 
-const initialState = localStorageService.getAccessToken() ? {
-    entities: null,
-    isLoading: true,
-    error: null,
-    auth: { userId: localStorageService.getUserId() },
-    isLoggedIn: true,
-    dataLoaded: false
-} : {
-    entities: null,
-    isLoading: false,
-    error: null,
-    auth: null,
-    isLoggedIn: false,
-    dataLoaded: false
-};
+const initialState = localStorageService.getAccessToken()
+    ? {
+          entities: null,
+          isLoading: true,
+          error: null,
+          auth: { userId: localStorageService.getUserId() },
+          isLoggedIn: true,
+          dataLoaded: false
+      }
+    : {
+          entities: null,
+          isLoading: false,
+          error: null,
+          auth: null,
+          isLoggedIn: false,
+          dataLoaded: false
+      };
 
 const usersSlice = createSlice({
     name: "users",
@@ -58,7 +60,9 @@ const usersSlice = createSlice({
             state.dataLoaded = false;
         },
         userUpdateSuccessed: (state, action) => {
-            const elementIndex = state.entities.findIndex((u) => u._id === action.payload._id);
+            const elementIndex = state.entities.findIndex(
+                (u) => u._id === action.payload._id
+            );
             state.entities[elementIndex] = action.payload;
             state.isLoading = false;
         },
@@ -86,48 +90,52 @@ const userCreateFailed = createAction("users/userCreateFailed");
 const userUpdateRequested = createAction("users/userUpdateRequested");
 const userUpdateFailed = createAction("users/userUpdateFailed");
 
-export const login = ({ payload, redirect }) => async (dispatch) => {
-    const { email, password } = payload;
-    dispatch(authRequested());
-    try {
-        const data = await authService.login({ email, password });
-        dispatch(authRequestSuccess({ userId: data.localId }));
-        localStorageService.setTokens(data);
-        history.push(redirect);
-    } catch (error) {
-        const { code, message } = error.response.data.error;
-        if (code === 400) {
-            const errorMessage = generateAuthError(message);
-            dispatch(authRequestFailed(errorMessage));
-        } else {
+export const login =
+    ({ payload, redirect }) =>
+    async (dispatch) => {
+        const { email, password } = payload;
+        dispatch(authRequested());
+        try {
+            const data = await authService.login({ email, password });
+            dispatch(authRequestSuccess({ userId: data.localId }));
+            localStorageService.setTokens(data);
+            history.push(redirect);
+        } catch (error) {
+            const { code, message } = error.response.data.error;
+            if (code === 400) {
+                const errorMessage = generateAuthError(message);
+                dispatch(authRequestFailed(errorMessage));
+            } else {
+                dispatch(authRequestFailed(error.message));
+            }
+        }
+    };
+export const signUp =
+    ({ email, password, ...rest }) =>
+    async (dispatch) => {
+        dispatch(authRequested());
+        try {
+            const data = await authService.register({ email, password });
+            localStorageService.setTokens(data);
+            dispatch(authRequestSuccess({ userId: data.localId }));
+            dispatch(
+                createUser({
+                    _id: data.localId,
+                    email,
+                    rate: getRandomInt(1, 5),
+                    completedMeetings: getRandomInt(0, 200),
+                    image: `https://avatars.dicebear.com/api/avataaars/${(
+                        Math.random() + 1
+                    )
+                        .toString(36)
+                        .substring(7)}.svg`,
+                    ...rest
+                })
+            );
+        } catch (error) {
             dispatch(authRequestFailed(error.message));
         }
-    }
-};
-export const signUp = ({ email, password, ...rest }) => async (dispatch) => {
-    dispatch(authRequested());
-    try {
-        const data = await authService.register({ email, password });
-        localStorageService.setTokens(data);
-        dispatch(authRequestSuccess({ userId: data.localId }));
-        dispatch(
-            createUser({
-                _id: data.localId,
-                email,
-                rate: getRandomInt(1, 5),
-                completedMeetings: getRandomInt(0, 200),
-                image: `https://avatars.dicebear.com/api/avataaars/${(
-                    Math.random() + 1
-                )
-                    .toString(36)
-                    .substring(7)}.svg`,
-                ...rest
-            })
-        );
-    } catch (error) {
-        dispatch(authRequestFailed(error.message));
-    }
-};
+    };
 export const logOut = () => (dispatch) => {
     localStorageService.removeAuthData();
     dispatch(userLoggedOut());
@@ -156,7 +164,7 @@ export const loadUsersList = () => async (dispatch) => {
         dispatch(usersRequestFailed(error.message));
     }
 };
-export const updateCurrentUserData = (data) => async (dispatch, getState) => {
+export const updateCurrentUserData = (data) => async (dispatch) => {
     dispatch(userUpdateRequested());
     try {
         const { content } = await userService.update(data);
@@ -170,7 +178,9 @@ export const updateCurrentUserData = (data) => async (dispatch, getState) => {
 export const getUsersList = () => (state) => state.users.entities;
 export const getCurrentUserData = () => (state) => {
     if (state.users.entities) {
-        return state.users.entities.find((u) => u._id === state.users.auth.userId);
+        return state.users.entities.find(
+            (u) => u._id === state.users.auth.userId
+        );
     }
     return null;
 };

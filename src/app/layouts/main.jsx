@@ -12,11 +12,15 @@ const Main = () => {
             <h1>Main Page</h1>
             <h3>Инициализация данных в FireBase</h3>
             <ul>
-                <li>Status: { status }</li>
+                <li>Status: {status}</li>
                 <li>progress: {progress}%</li>
                 {error && <li>error: {error}</li>}
             </ul>
-            <button disabled={true} className="btn btn-primary" onClick={handleClick}>
+            <button
+                disabled={true}
+                className="btn btn-primary"
+                onClick={handleClick}
+            >
                 {" "}
                 Инициализировать
             </button>

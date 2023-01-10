@@ -15,7 +15,7 @@ const CheckBoxField = ({ name, value, onChange, children, error, ...rest }) => {
                 className={getInputClasses()}
                 type="checkbox"
                 value=""
-                id={ name }
+                id={name}
                 name={name}
                 checked={value}
                 onChange={handleChange}
@@ -34,7 +34,10 @@ CheckBoxField.propTypes = {
     value: PropTypes.bool,
     error: PropTypes.string,
     onChange: PropTypes.func,
-    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ])
 };
 
 export default CheckBoxField;

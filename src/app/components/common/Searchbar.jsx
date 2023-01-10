@@ -10,7 +10,7 @@ const Searchbar = ({ value, onChange }) => {
                 className="form-control"
                 placeholder="Search..."
                 value={value}
-                onChange={e => onChange(e.target.value)}
+                onChange={(e) => onChange(e.target.value)}
             />
         </div>
     );

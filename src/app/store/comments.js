@@ -34,7 +34,13 @@ const commentsSlice = createSlice({
 });
 
 const { actions, reducer: commentsReducer } = commentsSlice;
-const { commentsRequested, commentsReceived, commentsRequestFailed, commentCreated, commentRemoved } = actions;
+const {
+    commentsRequested,
+    commentsReceived,
+    commentsRequestFailed,
+    commentCreated,
+    commentRemoved
+} = actions;
 
 const commentCreateRequested = createAction("comments/commentCreateRequested");
 const commentRemoveRequested = createAction("comments/commentRemoveRequested");
@@ -68,6 +74,7 @@ export const removeComment = (commentId) => async (dispatch) => {
 };
 
 export const getComments = () => (state) => state.comments.entities;
-export const getCommentsLoadingStatus = () => (state) => state.comments.isLoading;
+export const getCommentsLoadingStatus = () => (state) =>
+    state.comments.isLoading;
 
 export default commentsReducer;

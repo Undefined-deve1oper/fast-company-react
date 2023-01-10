@@ -5,4 +5,11 @@ import MultiSelectField from "./multiSelectField";
 import RadioField from "./radioField";
 import TextAreaField from "./textAreaField";
 
-export { TextField, SelectField, CheckBoxField, MultiSelectField, RadioField, TextAreaField };
+export {
+    TextField,
+    SelectField,
+    CheckBoxField,
+    MultiSelectField,
+    RadioField,
+    TextAreaField
+};

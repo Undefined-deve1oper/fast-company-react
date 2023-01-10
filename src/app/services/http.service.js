@@ -12,7 +12,8 @@ http.interceptors.request.use(
     async function (config) {
         if (configFile.isFireBase) {
             const containSlash = /\/$/gi.test(config.url);
-            config.url = (containSlash ? config.url.slice(0, -1) : config.url) + ".json";
+            config.url =
+                (containSlash ? config.url.slice(0, -1) : config.url) + ".json";
             const expiresDate = localStorageService.getTokenExpiresDate();
             const refreshToken = localStorageService.getRefreshToken();
             if (refreshToken && expiresDate > Date.now()) {
@@ -31,15 +32,16 @@ http.interceptors.request.use(
             }
         }
         return config;
-    }, function (error) {
+    },
+    function (error) {
         return Promise.reject(error);
     }
 );
 function transformData(data) {
     return data && !data._id
         ? Object.keys(data).map((key) => ({
-            ...data[key]
-        }))
+              ...data[key]
+          }))
         : data;
 }
 http.interceptors.response.use(
@@ -48,10 +50,12 @@ http.interceptors.response.use(
             res.data = { content: transformData(res.data) };
         }
         return res;
-    }, function (error) {
-        const expectedErrors = error.response &&
-        error.response.status >= 400 &&
-        error.response.status < 500;
+    },
+    function (error) {
+        const expectedErrors =
+            error.response &&
+            error.response.status >= 400 &&
+            error.response.status < 500;
 
         if (!expectedErrors) {
             console.log(error);
@@ -59,7 +63,8 @@ http.interceptors.response.use(
         }
 
         return Promise.reject(error);
-    });
+    }
+);
 
 const httpService = {
     get: http.get,

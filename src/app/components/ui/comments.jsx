@@ -22,7 +22,7 @@ const Comments = () => {
 
     useEffect(() => {
         dispatch(loadCommentsList(userId));
-    }, [userId]);
+    }, [dispatch, userId]);
 
     const handleSubmit = (data) => {
         const comment = {
@@ -44,25 +44,25 @@ const Comments = () => {
         <>
             <div className="card mb-2">
                 <div className="card-body ">
-                    <AddCommentForm onSubmit={ handleSubmit }/>
+                    <AddCommentForm onSubmit={handleSubmit} />
                 </div>
             </div>
-            { sortedComments.length > 0 && (
+            {sortedComments.length > 0 && (
                 <div className="card mb-3">
                     <div className="card-body ">
                         <h2>Comments</h2>
-                        <hr/>
+                        <hr />
                         {!isLoading ? (
                             <CommentsList
-                                comments={ sortedComments }
-                                onRemove={ handleRemoveComment }
+                                comments={sortedComments}
+                                onRemove={handleRemoveComment}
                             />
                         ) : (
                             "Loading..."
                         )}
                     </div>
                 </div>
-            ) }
+            )}
         </>
     );
 };
