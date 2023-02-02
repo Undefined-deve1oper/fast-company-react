@@ -20,7 +20,7 @@
         "react-dom": "^18.2.0",
         "react-redux": "^8.0.5",
         "react-router-dom": "^5.3.0",
-        "react-scripts": "4.0.3",
+        "react-scripts": "^5.0.1",
         "react-select": "^5.1.0",
         "react-toastify": "^8.1.0",
         "web-vitals": "^1.0.1"
@@ -31,12 +31,6 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "format": "npx prettier --write ."
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
     },
     "browserslist": {
         "production": [
@@ -51,17 +45,17 @@
         ]
     },
     "devDependencies": {
-        "eslint": "^7.32.0",
-        "eslint-config-airbnb": "^18.2.1",
-        "eslint-config-prettier": "^8.6.0",
-        "eslint-config-standard": "^16.0.3",
-        "eslint-plugin-import": "^2.24.2",
-        "eslint-plugin-jsx-a11y": "^6.4.1",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-prettier": "^4.2.1",
-        "eslint-plugin-promise": "^5.1.0",
-        "eslint-plugin-react": "^7.25.1",
-        "eslint-plugin-react-hooks": "^4.2.0",
-        "prettier": "^2.8.2"
+        "eslint": "^8.33.0",
+        "eslint-config-airbnb": "latest",
+        "eslint-config-prettier": "latest",
+        "eslint-config-standard": "latest",
+        "eslint-plugin-import": "latest",
+        "eslint-plugin-jsx-a11y": "latest",
+        "eslint-plugin-node": "latest",
+        "eslint-plugin-prettier": "latest",
+        "eslint-plugin-promise": "latest",
+        "eslint-plugin-react": "latest",
+        "eslint-plugin-react-hooks": "latest",
+        "prettier": "latest"
     }
 }
