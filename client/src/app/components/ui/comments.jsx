@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import CommentsList, { AddCommentForm } from "../common/comments";
 import { orderBy } from "lodash";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
     createComment,
     getComments,
@@ -9,15 +9,12 @@ import {
     loadCommentsList,
     removeComment
 } from "../../store/comments";
-import { useParams } from "react-router-dom";
-import { getCurrentUserId } from "../../store/users";
-import { nanoid } from "nanoid";
+import CommentsList, { AddCommentForm } from "../common/comments";
 
 const Comments = () => {
     const { userId } = useParams();
     const dispatch = useDispatch();
     const isLoading = useSelector(getCommentsLoadingStatus());
-    const currentUserId = useSelector(getCurrentUserId());
     const comments = useSelector(getComments());
 
     useEffect(() => {
@@ -27,10 +24,7 @@ const Comments = () => {
     const handleSubmit = (data) => {
         const comment = {
             ...data,
-            _id: nanoid(),
-            pageId: userId,
-            created_at: Date.now(),
-            userId: currentUserId
+            pageId: userId
         };
         dispatch(createComment(comment));
     };

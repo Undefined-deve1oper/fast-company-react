@@ -28,5 +28,15 @@
         "_id": "67rdca3eeb7f6fgeed471103",
         "name": "Неуверенный",
         "color": "dark"
+    },
+    {
+        "_id": "67rdca3eeb7f6fdskfdsj332",
+        "name": "Равнодушен к BMW",
+        "color": "warning"
+    },
+    {
+        "_id": "67rdca3eeb7f6fg12236dff3",
+        "name": "Оптимист",
+        "color": "info"
     }
 ]

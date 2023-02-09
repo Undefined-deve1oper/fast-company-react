@@ -2,10 +2,9 @@ const express = require("express");
 const bycrypt = require("bcryptjs");
 const User = require("../models/User");
 const router = express.Router({ mergeParams: true });
-const generateUserData = require("../utils/helpers");
+const { generateUserData } = require("../utils/helpers");
 const tokenService = require("../services/token.service");
 const { check, validationResult } = require("express-validator");
-const Token = require("../models/Token");
 
 router.post("/signUp", [
     check("email", "Некоректный email").isEmail(),
@@ -39,7 +38,7 @@ router.post("/signUp", [
             const hashedPassword = await bycrypt.hash(password, 12);
 
             const newUser = await User.create({
-                ...generateUserData,
+                ...generateUserData(),
                 ...req.body,
                 password: hashedPassword
             });
