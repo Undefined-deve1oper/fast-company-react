@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
@@ -7,21 +8,21 @@ import history from "../utils/history";
 
 const initialState = localStorageService.getAccessToken()
     ? {
-          entities: null,
-          isLoading: true,
-          error: null,
-          auth: { userId: localStorageService.getUserId() },
-          isLoggedIn: true,
-          dataLoaded: false
-      }
+        entities: null,
+        isLoading: true,
+        error: null,
+        auth: { userId: localStorageService.getUserId() },
+        isLoggedIn: true,
+        dataLoaded: false
+    }
     : {
-          entities: null,
-          isLoading: false,
-          error: null,
-          auth: null,
-          isLoggedIn: false,
-          dataLoaded: false
-      };
+        entities: null,
+        isLoading: false,
+        error: null,
+        auth: null,
+        isLoggedIn: false,
+        dataLoaded: false
+    };
 
 const usersSlice = createSlice({
     name: "users",
@@ -80,32 +81,35 @@ const authRequested = createAction("users/authRequested");
 const userUpdateRequested = createAction("users/userUpdateRequested");
 const userUpdateFailed = createAction("users/userUpdateFailed");
 
+
 export const login =
     ({ payload, redirect }) =>
-    async (dispatch) => {
-        const { email, password } = payload;
-        dispatch(authRequested());
-        try {
-            const data = await authService.login({ email, password });
-            localStorageService.setTokens(data);
-            dispatch(authRequestSuccess({ userId: data.userId }));
-            history.push(redirect);
-        } catch (error) {
-            const { code, message } = error.response.data.error;
-            if (code === 400) {
-                const errorMessage = generateAuthError(message);
-                dispatch(authRequestFailed(errorMessage));
-            } else {
-                dispatch(authRequestFailed(error.message));
+        async (dispatch) => {
+            const { email, password } = payload;
+            dispatch(authRequested());
+            try {
+                const data = await authService.login({ email, password });
+                localStorageService.setTokens(data);
+                dispatch(authRequestSuccess({ userId: data.userId }));
+                history.push(redirect);
+            } catch (error) {
+                const { code, message } = error.response.data.error;
+                if (code === 400) {
+                    const errorMessage = generateAuthError(message);
+                    dispatch(authRequestFailed(errorMessage));
+                } else {
+                    dispatch(authRequestFailed(error.message));
+                }
             }
-        }
-    };
+        };
+
 export const signUp = (payload) => async (dispatch) => {
     dispatch(authRequested());
     try {
         const data = await authService.register(payload);
         localStorageService.setTokens(data);
         dispatch(authRequestSuccess({ userId: data.userId }));
+        console.log(data.userId);
         history.push("/users");
     } catch (error) {
         dispatch(authRequestFailed(error.message));
